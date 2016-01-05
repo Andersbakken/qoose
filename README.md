@@ -1,2 +1,2 @@
-# qtchooser
-Qt chooser
+# QOose
+Qt-based chooser
