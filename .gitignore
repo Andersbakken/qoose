@@ -1,0 +1,9 @@
+/compile_commands.json
+/.ninja_deps
+/.ninja_log
+/CMakeCache.txt
+/CMakeFiles/
+/build.ninja
+/cmake_install.cmake
+/qtchoose
+/rules.ninja
