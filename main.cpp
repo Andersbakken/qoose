@@ -16,7 +16,7 @@ public:
                 const int idx = choice.indexOf(delimiter);
                 if (idx != -1) {
                     mChoices << choice.left(idx);
-                    mData << choice.mid(idx + 1);
+                    mData << choice.mid(idx + delimiter.size());
                 } else {
                     mChoices << choice;
                 }
@@ -35,7 +35,21 @@ public:
         setFixedSize(qMax(400, widest + 15), h + 15);
     }
 
-    void paintEvent(QPaintEvent *e)
+    void changeEvent(QEvent *e) override
+    {
+        QWidget::changeEvent(e);
+        if (e->type() == QEvent::ActivationChange && !isActiveWindow()) {
+            close();
+        }
+    }
+
+    void focusOutEvent(QFocusEvent *e) override
+    {
+        QWidget::focusOutEvent(e);
+        close();
+    }
+
+    void paintEvent(QPaintEvent *e) override
     {
         QPainter p(this);
         p.fillRect(rect(), Qt::black);
@@ -72,7 +86,7 @@ public:
         }
     }
 
-    void keyPressEvent(QKeyEvent *e)
+    void keyPressEvent(QKeyEvent *e) override
     {
         bool search = false;
         switch (e->key()) {
