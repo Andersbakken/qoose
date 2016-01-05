@@ -22,6 +22,17 @@ public:
                 }
             }
         }
+        QFont f;
+        f.setPixelSize(15);
+        setFont(f);
+        QFontMetrics fm(f);
+        const int lineHeight = fm.height() + 4;
+        const int h = mChoices.size() * lineHeight;
+        int widest = 0;
+        for (const QByteArray &c : mChoices) {
+            widest = qMax(widest, fm.boundingRect(c).width());
+        }
+        setFixedSize(qMax(400, widest + 15), h + 15);
     }
 
     void paintEvent(QPaintEvent *e)
@@ -29,9 +40,6 @@ public:
         QPainter p(this);
         p.fillRect(rect(), Qt::black);
         p.setPen(mCur == -1 ? Qt::red : Qt::green);
-        QFont f;
-        f.setPixelSize(15);
-        p.setFont(f);
         p.drawText(rect(), Qt::AlignLeft|Qt::AlignBottom, mInput);
         p.drawText(rect(), Qt::AlignRight|Qt::AlignBottom, mPattern);
         p.setPen(Qt::gray);
@@ -159,34 +167,33 @@ int main(int argc, char **argv)
     QApplication a(argc, argv);
     QList<QByteArray> choices;
     QByteArray delimiter;
-    QSize size(500, 500);
     for (int i=1; i<argc; ++i) {
         if (!strcmp(argv[i], "--help")) {
-            printf("qtchooser ([-d|--delimiter] delimiter) ([--size|-s] size) ...choices...\n");
+            printf("qtchooser ([-d|--delimiter] delimiter) ...choices...\n");
             return 0;
-        } else if (!strcmp(argv[i], "--size") || !strcmp(argv[i], "-s")) {
-            if (i + 1 == argc) {
-                fprintf(stderr, "Tool!\n");
-                return 1;
-            }
-            ++i;
-            const char *x = strchr(argv[i], 'x');
-            if (!x) {
-                fprintf(stderr, "Tool!\n");
-                return 1;
-            }
-            bool ok;
-            const int w = QByteArray(argv[i], x - argv[i]).toUInt(&ok);
-            if (!ok) {
-                fprintf(stderr, "Tool!\n");
-                return 1;
-            }
-            const int h = QByteArray(argv[i], x - argv[i]).toUInt(&ok);
-            if (!ok) {
-                fprintf(stderr, "Tool!\n");
-                return 1;
-            }
-            size = QSize(w, h);
+        // } else if (!strcmp(argv[i], "--size") || !strcmp(argv[i], "-s")) {
+        //     if (i + 1 == argc) {
+        //         fprintf(stderr, "Tool!\n");
+        //         return 1;
+        //     }
+        //     ++i;
+        //     const char *x = strchr(argv[i], 'x');
+        //     if (!x) {
+        //         fprintf(stderr, "Tool!\n");
+        //         return 1;
+        //     }
+        //     bool ok;
+        //     const int w = QByteArray(argv[i], x - argv[i]).toUInt(&ok);
+        //     if (!ok) {
+        //         fprintf(stderr, "Tool!\n");
+        //         return 1;
+        //     }
+        //     const int h = QByteArray(argv[i], x - argv[i]).toUInt(&ok);
+        //     if (!ok) {
+        //         fprintf(stderr, "Tool!\n");
+        //         return 1;
+        //     }
+        //     size = QSize(w, h);
         } else if (!strcmp(argv[i], "--delimiter") || !strcmp(argv[i], "-d")) {
             if (i + 1 == argc) {
                 fprintf(stderr, "Tool!\n");
@@ -205,7 +212,7 @@ int main(int argc, char **argv)
     }
 
     Chooser c(choices, delimiter);
-    c.setFixedSize(size);
+    // c.setFixedSize(size);
     c.show();
     return a.exec();
 }
