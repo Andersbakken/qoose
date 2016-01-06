@@ -100,6 +100,7 @@ public:
             break;
         case Qt::Key_Down:
             mInput.clear();
+            mPattern.clear();
             if (mCur == -1) {
                 mCur = 0;
             } else if (mCur + 1 < mChoices.size()) {
@@ -111,6 +112,7 @@ public:
             break;
         case Qt::Key_Up:
             mInput.clear();
+            mPattern.clear();
             if (mCur == -1) {
                 mCur = 0;
             } else if (mCur) {
