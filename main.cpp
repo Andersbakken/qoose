@@ -1,4 +1,4 @@
-#include <QtGui>
+#include <QtWidgets>
 
 class Chooser : public QWidget
 {
@@ -146,7 +146,7 @@ public:
             break;
         }
 
-        if (!e->text().isEmpty() && !e->modifiers() && isalnum(static_cast<unsigned char>(e->text().at(0).toAscii()))) {
+        if (!e->text().isEmpty() && !e->modifiers() && isalnum(static_cast<unsigned char>(e->text().at(0).toLatin1()))) {
             mInput.append(e->text());
             search = true;
         }
