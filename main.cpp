@@ -147,7 +147,7 @@ public:
         }
 
         if (!e->text().isEmpty() && !e->modifiers() && isalnum(static_cast<unsigned char>(e->text().at(0).toLatin1()))) {
-            mInput.append(e->text());
+            mInput.append(e->text().toUtf8());
             search = true;
         }
         if (search) {
